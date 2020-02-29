@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FirebaseContext } from './utils/firestore' 
+import { FirebaseContext } from '../Components/utils/firebase' 
 // importamos el contexto de nuestra instancia de firebase para poder usar esa app con su contexto aqui
 import 'firebase/firestore'
+import LeadListContainer from '../Components/LeadListContainer';
 
-function Users () {
+function Leads () {
     
     const firebaseApp = useContext(FirebaseContext) 
     //firebaseApp es la instancia de la aplicacion que inizializamos con Firebase en utils/firebase (value={firebase}) 
@@ -21,13 +22,12 @@ function Users () {
         const unsubscribe = firebaseApp.firestore().collection('users').onSnapshot( snapshot => { 
             // con onSnapshot creamos un listener que regresa el snapshot de esta colecccion cada que cambie la coleccion
     
-            const users = snapshot.docs.map(doc=>({ // extraemos los docs (para apartar de los datos de headers)
+            const leads = snapshot.docs.map(doc=>({ // extraemos los docs (para apartar de los datos de headers)
                 id: doc.id, 
-                ...doc.data()  // cada doc se vuelve objeto para guardarlo en nuestra lista
-            })); // .data() es una funcion de firebase para extraer el data de nuestro doc (de lo contrario tendriamos que espeficicar cada field para poder extraerlo, como el id)
-    
+                ...doc.data()  
+            })); // .data() es una funcion de firebase para extraer el data de nuestro doc 
             setLoading(false) 
-            setList(users)}, // guardamos nuestra lista de users en el estado con valor List
+            setList(leads)}, // guardamos nuestra lista de users en el estado con valor List
     
             err => { setError(err) } ) // guardamos el error en el estado
 
@@ -41,18 +41,22 @@ function Users () {
     // en este caso usamos un [] para especificar que no depende de ningun prop o valor en el estado, 
     // solo queremos que corra 1 sola vez al montar y que limpie con la funcion que regresamos solo 1 vez al desmontar
 
+
+    const listItems = (inputObject) => {
+        let finalArray = [];
+        // extract from object and return key value pairs in arrays
+        // one here to extract only name and last name
+        // one in list to extract the rest of the information for just that one lead
+    }
+
     return (
         <>
         {!loading && !error ? 
-            list.map((user)=>
-                <div key={user.id}>
-                <div>{user.name}</div>
-                <div>{user.last_name}</div>
-                </div> ) 
+                <LeadListContainer list={list}/>
             : error}
         </>
     )
         
 } 
 
-export default Users
+export default Leads

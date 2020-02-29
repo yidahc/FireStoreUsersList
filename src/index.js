@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import FireStoreProvider from './Components/utils/firestore';
+import FireStoreProvider from './Components/utils/firebase';
 
 ReactDOM.render(
     <FireStoreProvider> {/* wrapeamos el app en el proveedor del contexto en el que estamos conectados a firebase */}
