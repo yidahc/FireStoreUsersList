@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import FireStoreProvider from './Components/utils/firestore';
 
 ReactDOM.render(
-    <FireStoreProvider> {/* wrapeamos el app en el proveedor del contexto de nuestra firestore db */}
+    <FireStoreProvider> {/* wrapeamos el app en el proveedor del contexto en el que estamos conectados a firebase */}
         <App /> 
     </FireStoreProvider>, document.getElementById('root'));
 

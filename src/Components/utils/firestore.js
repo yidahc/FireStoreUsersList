@@ -13,22 +13,21 @@ const firebaseConfig = { // configuraciones para conectarse a la base de datos d
 };
 
 
-let db;
+//let db;
 
 export default ({ children }) => {
     if (!firebase.apps.length) { // confirmar que aun no este abierta la coneccion
         firebase.initializeApp(firebaseConfig); // inizializa nuestra firebase app con las configuraciones de arriba
     }
-    db = firebase.firestore() // creando variable para referirnos a la base de datos en nuestra firestore
     return (
-        <FirebaseContext.Provider value={ db }> 
+        <FirebaseContext.Provider value={ firebase }> 
         {/*Provider permite que los children tengan acceso a los cambios en este contexto(FirebaseContext)
-        y le damos el valor de db, asi cada que haya un cambio en el db de nuestra firestore 
+        y le damos el valor de firebase, asi cada que haya un cambio en nuestra instancia de firebase 
         tambien habra un cambio en los componentes children*/}
             {children}
         </FirebaseContext.Provider>
     )
-} // crea un wrapper para nuestra app que nos da acceso a la base de datos de firebase a la que estamos conectados
+} // crea un wrapper para nuestra app que nos da acceso al firebase app que acabamos de inizializar
 
-export const FirebaseContext = createContext(db)
-// exportamos el contexto en el que esta
+export const FirebaseContext = createContext(firebase)
+// encapsulamos el contexto en el que esta nuestra instancia de firebase, para poder usarlo desde otros componentes
