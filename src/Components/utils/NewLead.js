@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import ExpandLess from '@material-ui/icons/ExpandLess';
-
+import useForm from './useForm';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function NewLead() {
+export default function NewLead({addLead}) {
 
   const [formOpen, setFormOpen] = React.useState(false)
 
@@ -35,6 +35,10 @@ export default function NewLead() {
   }
 
   const classes = useStyles();
+
+ // const {  } = useForm();
+  const { inputs, handleInputChange, handleSubmit } = useForm(addLead);
+
 
   const renderForm = () => {
     return (
@@ -50,11 +54,13 @@ export default function NewLead() {
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="fname"
-                name="firstName"
+                name="name"
                 variant="outlined"
+                value={inputs.name}
+                onChange={handleInputChange}
                 required
                 fullWidth
-                id="firstName"
+                id="name"
                 label="First Name"
                 autoFocus
               />
@@ -64,17 +70,20 @@ export default function NewLead() {
                 variant="outlined"
                 required
                 fullWidth
-                id="lastName"
+                value={inputs.last_name}
+                onChange={handleInputChange}
+                id="last_name"
                 label="Last Name"
-                name="lastName"
+                name="last_name"
                 autoComplete="lname"
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
-                required
                 fullWidth
+                value={inputs.email}
+                onChange={handleInputChange}
                 id="email"
                 label="Email Address"
                 name="email"
@@ -86,6 +95,8 @@ export default function NewLead() {
                 variant="outlined"
                 required
                 fullWidth
+                value={inputs.status}
+                onChange={handleInputChange}
                 name="status"
                 label="Status"
                 id="status"
@@ -99,6 +110,7 @@ export default function NewLead() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleSubmit}
           >
             Add Lead
           </Button>
