@@ -1,10 +1,10 @@
 import React from 'react';
-import Users from './Components/Users';
+import Leads from './Views/Leads';
 
 function App() {
   return (
     <div>
-      <Users />
+      <Leads />
     </div>
   );
 }
