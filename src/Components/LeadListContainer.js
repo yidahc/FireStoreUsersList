@@ -2,8 +2,8 @@ import React, {useState, useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { List, ListItem, ListItemText, Collapse } from '@material-ui/core';
 import SelectedLead from './SelectedLead';
-import NewLead from './NewLead';
-import EditLead from './NewLead';
+import NewLead from './utils/NewLead';
+import EditLead from './utils/EditLead';
 import { FirebaseContext } from '../Components/utils/firebase' 
 // importamos el contexto de nuestra instancia de firebase para poder usar esa app con su contexto aqui
 import 'firebase/firestore'
@@ -39,6 +39,11 @@ function MainList({ list }) {
     firebaseApp.firestore().collection('users').add(params)
   }
 
+  const editLead = (params) => {
+    console.log(params)
+    firebaseApp.firestore().collection('users').doc(selectedID).update(params)
+  }
+
   return (
     <div className={classes.root}>
       <List className={classes.list}>
@@ -54,7 +59,7 @@ function MainList({ list }) {
           {selectedID && !edit ?
             <SelectedLead leadID={selectedID} setEdit={setEdit}/>
             : selectedID && edit ?
-               <EditLead leadID={selectedID}/>
+               <EditLead leadID={selectedID} editLead={editLead}/>
                : null
           }
         </List>

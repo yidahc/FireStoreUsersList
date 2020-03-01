@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import ExpandLess from '@material-ui/icons/ExpandLess';
-import useForm from './utils/useForm';
+import useForm from './useForm';
 
 const useStyles = makeStyles(theme => ({
   paper: {
