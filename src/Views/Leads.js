@@ -24,7 +24,8 @@ function Leads () {
     
             const leads = snapshot.docs.map(doc=>({ // extraemos los docs (para apartar de los datos de headers)
                 id: doc.id, 
-                ...doc.data()  
+                name: doc.data().name,
+                last_name: doc.data().last_name,
             })); // .data() es una funcion de firebase para extraer el data de nuestro doc 
             setLoading(false) 
             setList(leads)}, // guardamos nuestra lista de users en el estado con valor List
@@ -41,13 +42,6 @@ function Leads () {
     // en este caso usamos un [] para especificar que no depende de ningun prop o valor en el estado, 
     // solo queremos que corra 1 sola vez al montar y que limpie con la funcion que regresamos solo 1 vez al desmontar
 
-
-    const listItems = (inputObject) => {
-        let finalArray = [];
-        // extract from object and return key value pairs in arrays
-        // one here to extract only name and last name
-        // one in list to extract the rest of the information for just that one lead
-    }
 
     return (
         <>

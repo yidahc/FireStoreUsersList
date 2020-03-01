@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { List, ListItem, ListItemText, Collapse } from '@material-ui/core';
 import NestedList from './NestedList';
+import NewLead from './NewLead';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,32 +21,11 @@ const useStyles = makeStyles(theme => ({
 
 function MainList({ list }) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState(null);
+  const [selectedID, setSelected] = React.useState(null);
 
   const handleClick = (id) => {
-    setOpen(!open);
-    const selectedLead = list.filter(e => e.id === id)[0];
-    console.log(selectedLead)
-    setSelected(selectedLead) //guardamos el objeto del 'lead' seleccionado en el 'selected' state
+    setSelected(id) //guardamos el id del 'lead' seleccionado en el 'selectedID' state
   };
-
-  const editField = (id, key) => {
-    console.log (id, key)
-  }
-
-  const renderSelected = () => {
-    let finalArray = [];
-      for (var key in selected) {
-        if (key !== "id"){
-          const title = key.replace("_", " ");
-        finalArray.push(
-          <NestedList key={key} leadID={selected.id} keyName={key} title={title} value={selected[key]}/>
-        )
-        }
-      }
-    return finalArray;
-  }
 
   return (
     <div className={classes.root}>
@@ -55,11 +35,12 @@ function MainList({ list }) {
             <ListItemText primary={`${e.name} ${e.last_name}`} />
           </ListItem>
         ))}
+        <NewLead />
       </List>
       <Collapse className={classes.collapse} in={true} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {selected ?
-           renderSelected()
+          {selectedID ?
+            <NestedList leadID={selectedID} />
             : null}
         </List>
       </Collapse>
