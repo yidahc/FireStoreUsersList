@@ -26,12 +26,14 @@ const useStyles = makeStyles(theme => ({
 function MainList({ list }) {
   const classes = useStyles();
   const [selectedID, setSelected] = useState(null);
+  const [selectedName, setSelectedName] = useState(null);
   const [edit, setEdit] = useState(false);
   const firebaseApp = useContext(FirebaseContext) 
 
-  const handleClick = (id) => {
+  const handleClick = (id, name) => {
     setEdit(false); // para que nos muestre los datos del lead en vez del form para editarlo (si es que estabamos editando otro lead)
     setSelected(id) //guardamos el id del 'lead' seleccionado en el 'selectedID' state
+    setSelectedName(name)
   };
 
   const addLead = (params) => {
@@ -48,7 +50,7 @@ function MainList({ list }) {
     <div className={classes.root}>
       <List className={classes.list}>
         {list.map(e => (
-          <ListItem key={e.id} button onClick={() => handleClick(e.id)}>
+          <ListItem key={e.id} button onClick={() => handleClick(e.id, `${e.name} ${e.last_name}`)}>
             <ListItemText primary={`${e.name} ${e.last_name}`} />
           </ListItem>
         ))}
@@ -59,7 +61,7 @@ function MainList({ list }) {
           {selectedID && !edit ?
             <SelectedLead leadID={selectedID} setEdit={setEdit}/>
             : selectedID && edit ?
-               <EditLead leadID={selectedID} editLead={editLead}/>
+               <EditLead leadID={selectedID} editLead={editLead} leadName={selectedName}/>
                : null
           }
         </List>

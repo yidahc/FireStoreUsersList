@@ -3,6 +3,7 @@ import { FirebaseContext } from '../Components/utils/firebase'
 // importamos el contexto de nuestra instancia de firebase para poder usar esa app con su contexto aqui
 import 'firebase/firestore'
 import LeadListContainer from '../Components/LeadListContainer';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 function Leads () {
     
@@ -14,21 +15,23 @@ function Leads () {
     // creando variable list y setList para usar el State de React (list es el valor y setList es la funcion que cambia ese valor)
     const [error, setError] = React.useState(null) 
     const [loading, setLoading] = React.useState(true) 
+    const [last, setLast] = useState("A") 
 
 
     useEffect(() => { 
     // useEffect es la funcion que va a correr cada que pase un React lifecycle (ComponenentDidMount, ComponenetDidUpdate, etc)
         
-        const unsubscribe = firebaseApp.firestore().collection('users').onSnapshot( snapshot => { 
+        const unsubscribe = firebaseApp.firestore().collection('users').orderBy("name").limit(12).onSnapshot( snapshot => { 
             // con onSnapshot creamos un listener que regresa el snapshot de esta colecccion cada que cambie la coleccion
-    
+            const lastVisible = snapshot.docs[snapshot.docs.length-1];
             const leads = snapshot.docs.map(doc=>({ // extraemos los docs (para apartar de los datos de headers)
                 id: doc.id, 
                 name: doc.data().name,
                 last_name: doc.data().last_name,
             })); // .data() es una funcion de firebase para extraer el data de nuestro doc 
             setLoading(false) 
-            setList(leads)}, // guardamos nuestra lista de users en el estado con valor List
+            setLast(lastVisible)
+            setList([...leads,...list])}, // guardamos nuestra lista de users en el estado con valor List
     
             err => { setError(err) } ) // guardamos el error en el estado
 
@@ -46,7 +49,13 @@ function Leads () {
     return (
         <>
         {!loading && !error ? 
-                <LeadListContainer list={list}/>
+        <InfiniteScroll 
+        dataLength={list.length}
+        next={useEffect}
+        hasMore={true}>
+             <LeadListContainer list={list}/>
+      </InfiniteScroll>
+                
             : error}
         </>
     )
@@ -54,3 +63,6 @@ function Leads () {
 } 
 
 export default Leads
+
+// firebase pagination: https://stackoverflow.com/questions/53044791/how-to-paginate-cloud-firestore-data-with-reactjs
+// https://firebase.google.com/docs/firestore/query-data/query-cursors

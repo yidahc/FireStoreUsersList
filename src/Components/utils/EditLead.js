@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function EditLead({ editLead, leadID }) {
+export default function EditLead({ leadName, editLead, leadID }) {
   const classes = useStyles();
 
   const { inputs, handleInputChange, handleSubmit } = useForm(editLead);
@@ -94,7 +94,7 @@ export default function EditLead({ editLead, leadID }) {
               className={classes.submit}
               onClick={handleSubmit}
             >
-              Edit Lead {leadID}
+              Edit Lead {leadName}
             </Button>
           </form>
       </Container>
