@@ -7,7 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import ExpandLess from '@material-ui/icons/ExpandLess';
+import { useFirestore } from "react-redux-firebase";
 import useForm from './useForm';
+
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -26,15 +28,21 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function NewLead({addLead}) {
+export default function NewLead() {
 
   const [formOpen, setFormOpen] = React.useState(false)
+  const firestore  = useFirestore();
 
+  function addLead(props) {
+    openForm();
+    firestore.collection('leads').add(props);
+  }
+
+
+  const classes = useStyles();
   const openForm = () =>{
     setFormOpen(!formOpen);
   }
-
-  const classes = useStyles();
 
  // const {  } = useForm();
   const { inputs, handleInputChange, handleSubmit } = useForm(addLead);
@@ -54,13 +62,13 @@ export default function NewLead({addLead}) {
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="fname"
-                name="name"
+                name="first_name"
                 variant="outlined"
-                value={inputs.name}
+                value={inputs.first_name}
                 onChange={handleInputChange}
                 required
                 fullWidth
-                id="name"
+                id="first_name"
                 label="First Name"
                 autoFocus
               />
