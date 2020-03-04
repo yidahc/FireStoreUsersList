@@ -7,22 +7,15 @@ function useForm(callback, FormFields){
 
     useEffect(() => {
         let theseInputs = {};
-        FormFields.map(({name, required}) => {
-            if (required) theseInputs[name] = "";
-        })
+        FormFields.map(({name}) => theseInputs[name] = "")
         setInputs(theseInputs);
-        return () => {
-            setInputs({})
-        };
-    }, []) // solo corre una vez al montar (setInputs(theseInputs) y una vez al desmontar (setInputs({}))
+    }, []) // solo corre una vez al montar, sin dependencias (para establecer los controlled inputs)
    
 
-    const { isValidated, errorMessages, handleValidation } = useValidation(inputs)
+    const { isValidated, errorMessages } = useValidation(inputs, FormFields)
 
     const handleSubmit = (event) => {
         if (event) event.preventDefault(); // prevents refresh
-        console.log(errorMessages)
-
         if (isValidated) callback(inputs)
     }
 
@@ -30,9 +23,7 @@ function useForm(callback, FormFields){
     const handleInputChange = (event) => {
         event.persist(); // persists the value of your inputs in the virtual dom
         const {name, value, required} = event.target
-        setInputs(prevInputs => ({...prevInputs, [name]:value}), 
-                                handleValidation(value, name, required)) 
-
+        setInputs(prevInputs => ({...prevInputs, [name]:value})) 
     }
 
     return {
