@@ -1,9 +1,21 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import useValidation from './formValidation';
 
-function useForm(callback){
+function useForm(callback, FormFields){
 
     const [inputs, setInputs] = useState({}); // aqui guardaremos los valores de todos nuestros inputs
+
+    useEffect(() => {
+        let theseInputs = {};
+        FormFields.map(({name, required}) => {
+            if (required) theseInputs[name] = "";
+        })
+        setInputs(theseInputs);
+        return () => {
+            setInputs({})
+        };
+    }, []) // solo corre una vez al montar (setInputs(theseInputs) y una vez al desmontar (setInputs({}))
+   
 
     const { isValidated, errorMessages, handleValidation } = useValidation(inputs)
 
