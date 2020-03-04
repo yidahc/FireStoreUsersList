@@ -67,10 +67,10 @@ export default function NewLead() {
                 value={inputs.first_name}
                 onChange={handleInputChange}
                 required
-                requiredType="string"
                 fullWidth
                 id="first_name"
                 label="First Name"
+                helperText={errorMessages.first_name}
                 autoFocus
               />
             </Grid>
@@ -78,10 +78,10 @@ export default function NewLead() {
               <TextField
                 variant="outlined"
                 required
-                requiredType="string"
                 fullWidth
                 value={inputs.last_name}
                 onChange={handleInputChange}
+                helperText={errorMessages.last_name}
                 id="last_name"
                 label="Last Name"
                 name="last_name"
@@ -91,10 +91,10 @@ export default function NewLead() {
               <TextField
                 variant="outlined"
                 fullWidth
-                required
-                requiredType="email"
+                required                
                 value={inputs.email}
                 onChange={handleInputChange}
+                helperText={errorMessages.email}
                 id="email"
                 label="Email Address"
                 name="email"
@@ -104,10 +104,10 @@ export default function NewLead() {
               <TextField
                 variant="outlined"
                 required
-                requiredType="string"
                 fullWidth
                 value={inputs.status}
                 onChange={handleInputChange}
+                helperText={errorMessages.status}
                 name="status"
                 label="Status"
                 id="status"

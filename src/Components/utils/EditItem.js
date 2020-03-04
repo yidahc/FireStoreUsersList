@@ -53,7 +53,6 @@ export default function EditLead() {
                   value={inputs.first_name}
                   onChange={handleInputChange}
                   placeholder={lead.first_name}
-                  required
                   fullWidth
                   id="first_name"
                   label="First Name"
@@ -63,7 +62,6 @@ export default function EditLead() {
               <Grid item xs={12} sm={6}>
                 <TextField
                   variant="outlined"
-                  required
                   fullWidth
                   value={inputs.last_name}
                   onChange={handleInputChange}
