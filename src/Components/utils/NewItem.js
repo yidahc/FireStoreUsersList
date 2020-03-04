@@ -45,7 +45,7 @@ export default function NewLead() {
   }
 
  // const {  } = useForm();
-  const { inputs, handleInputChange, handleSubmit } = useForm(addLead);
+  const { inputs, errorMessages, handleInputChange, handleSubmit } = useForm(addLead);
 
 
   const renderForm = () => {
@@ -67,6 +67,7 @@ export default function NewLead() {
                 value={inputs.first_name}
                 onChange={handleInputChange}
                 required
+                requiredType="string"
                 fullWidth
                 id="first_name"
                 label="First Name"
@@ -77,38 +78,39 @@ export default function NewLead() {
               <TextField
                 variant="outlined"
                 required
+                requiredType="string"
                 fullWidth
                 value={inputs.last_name}
                 onChange={handleInputChange}
                 id="last_name"
                 label="Last Name"
                 name="last_name"
-                autoComplete="lname"
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 fullWidth
+                required
+                requiredType="email"
                 value={inputs.email}
                 onChange={handleInputChange}
                 id="email"
                 label="Email Address"
                 name="email"
-                autoComplete="email"
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
+                requiredType="string"
                 fullWidth
                 value={inputs.status}
                 onChange={handleInputChange}
                 name="status"
                 label="Status"
                 id="status"
-                autoComplete="status"
               />
             </Grid>
           </Grid>
