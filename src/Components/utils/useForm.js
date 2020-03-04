@@ -4,10 +4,12 @@ import useValidation from './formValidation';
 function useForm(callback, FormFields){
 
     const [inputs, setInputs] = useState({}); // aqui guardaremos los valores de todos nuestros inputs
-
+    
     useEffect(() => {
         let theseInputs = {};
-        FormFields.map(({name}) => theseInputs[name] = "")
+        if (FormFields) {
+            FormFields.map(({name}) => theseInputs[name] = "")
+        }
         setInputs(theseInputs);
     }, []) // solo corre una vez al montar, sin dependencias (para establecer los controlled inputs)
    
@@ -22,7 +24,7 @@ function useForm(callback, FormFields){
 
     const handleInputChange = (event) => {
         event.persist(); // persists the value of your inputs in the virtual dom
-        const {name, value, required} = event.target
+        const {name, value } = event.target
         setInputs(prevInputs => ({...prevInputs, [name]:value})) 
     }
 

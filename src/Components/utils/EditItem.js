@@ -9,14 +9,14 @@ import useForm from "./useForm";
 import { useFirestore } from "react-redux-firebase";
 import { useSelector } from "react-redux";
 
-
 const useStyles = makeStyles(theme => ({
   root: {
-    marginLeft: '-3%'
+    marginLeft: "-3%"
   },
   form: {
-    width: "100%", 
-    marginTop: theme.spacing(3)
+    width: "100%",
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3)
   },
   submit: {
     alignSelf: "center",
@@ -25,92 +25,70 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function EditLead() {
-  
-  const leadID = useSelector(state=> state.list.editID);
+  const leadID = useSelector(state => state.list.editID);
   //  useFirebaseConnect(`leads/${leadID}`)
   //const lead = useSelector(({ firebase: { ordered: { leads } } }) => leads && leads[leadId])
   const lead = useSelector(state => state.firestore.data.leads[leadID]);
-  const firestore  = useFirestore();
+  const firestore = useFirestore();
 
   function editItem(props) {
-    firestore.collection('leads').doc(leadID).update(props);
+    firestore
+      .collection("leads")
+      .doc(leadID)
+      .update(props);
   }
+
+  const FormFields = [
+    { name: "first_name", required: false },
+    { name: "last_name", required: false },
+    { name: "email", required: false },
+    { name: "status", required: false }
+  ];
 
   const { inputs, handleInputChange, handleSubmit } = useForm(editItem);
 
   const classes = useStyles();
+
+  const renderField = () => {
+    const formatTitle = (original) => original.split("_").map(string=> `${string.charAt(0).toUpperCase()}${string.slice(1)} `)
+
+    return (
+      <Grid container className={classes.form} spacing={2}>
+        {FormFields.map(({name, required}) =>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            name={name}
+            value={inputs[name]}
+            onChange={handleInputChange}
+            placeholder={lead[name]}
+            variant="outlined"
+            fullWidth
+            id={name}
+            label={formatTitle(name)}
+            required={required}
+            helperText={lead[name]}
+          />
+        </Grid>
+        )}
+      </Grid>
+    );
+  };
+
   const renderForm = () => {
     return (
       <Container component="main" className={classes.root} maxWidth="xs">
         <CssBaseline />
-          <form className={classes.form} noValidate>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="fname"
-                  name="first_name"
-                  variant="outlined"
-                  value={inputs.first_name}
-                  onChange={handleInputChange}
-                  placeholder={lead.first_name}
-                  fullWidth
-                  id="first_name"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  value={inputs.last_name}
-                  onChange={handleInputChange}
-                  placeholder={lead.last_name}
-                  id="last_name"
-                  label="Last Name"
-                  name="last_name"
-                  autoComplete="lname"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  value={inputs.email}
-                  onChange={handleInputChange}
-                  placeholder={lead.email}
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  value={inputs.status}
-                  onChange={handleInputChange}
-                  placeholder={lead.status}
-                  name="status"
-                  label="Status"
-                  id="status"
-                  autoComplete="status"
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={handleSubmit}
-            >
-              Edit Lead {lead.first_name}
-            </Button>
-          </form>
+          {renderField()}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={handleSubmit}
+          >
+            Edit Lead
+          </Button>
       </Container>
     );
   };

@@ -3,11 +3,11 @@ import {useState, useEffect} from 'react';
 function useValidation (inputs, FormFields) {
     const [isValidated, setValidation] = useState(false); // aqui confirmamos si esta validado el form o aun no
     const [errorMessages, setMessages] = useState({}) // aqui guardamos los error messages de los inputs aun no validados
-    const inputsToValidate = FormFields.filter(field=>field.required).map(({name}) => name)
+    const inputsToValidate = FormFields ? FormFields.filter(field=>field.required).map(({name}) => name) : null;
 
     useEffect(() => {
         for (var name in inputs){
-            if (inputsToValidate.includes(name)){
+            if ( inputsToValidate && inputsToValidate.includes(name)){
                 handleValidation(inputs[name], name)
             }
         }
@@ -28,15 +28,15 @@ function useValidation (inputs, FormFields) {
 
     const checkValid = () => {
         console.log("running checkValid")
-        if ((errorMessages.hasOwnProperty("submit") && Object.keys(errorMessages).length === 1) || Object.keys(errorMessages).length === 0) {
+        if (Object.keys(errorMessages).length === 0) {
             setValidation(true);
         } else {setValidation(false)}
     }
 
     const checkEmail = (email, fieldName) => {
-        const valid = /\S+@\S+\.\S{/.test(email) 
-        // verifica que sea un string (non-whitespace, minimo 3 chars de largo)+@+
-        // string(minimo 4 chars de largo, max 15)+.+string(2-7 chars)
+        const valid = /\S{5,}@\S{4,15}\.\S{2,5}/.test(email) 
+        // verifica que sea un string (non-whitespace, minimo 5 chars de largo)+@+
+        // string(minimo 4 chars de largo, max 15)+.+string(2-5 chars)
         if (valid) {
             setMessages(prevMessages => {delete prevMessages[fieldName];
                 return ({...prevMessages})}) 
@@ -46,7 +46,7 @@ function useValidation (inputs, FormFields) {
     }
     
     const checkString = (string, fieldName) => {
-        const valid = /\w{2,}/.test(string.trim()) //trim quita el whitespace del principio y final del string
+        const valid = /\w{3,}/.test(string.trim()) //trim quita el whitespace del principio y final del string
         // verifica que sea incluya minimo 3 "word characters" (0-9, a-z, A-Z)
         if (valid) {
             setMessages(prevMessages => {delete prevMessages[fieldName];
