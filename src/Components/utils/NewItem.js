@@ -7,7 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import ExpandLess from '@material-ui/icons/ExpandLess';
+import { useFirestore } from "react-redux-firebase";
 import useForm from './useForm';
+
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -26,18 +28,24 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function NewLead({addLead}) {
+export default function NewLead() {
 
   const [formOpen, setFormOpen] = React.useState(false)
+  const firestore  = useFirestore();
 
+  function addLead(props) {
+    openForm();
+    firestore.collection('leads').add(props);
+  }
+
+
+  const classes = useStyles();
   const openForm = () =>{
     setFormOpen(!formOpen);
   }
 
-  const classes = useStyles();
-
  // const {  } = useForm();
-  const { inputs, handleInputChange, handleSubmit } = useForm(addLead);
+  const { inputs, errorMessages, handleInputChange, handleSubmit } = useForm(addLead);
 
 
   const renderForm = () => {
@@ -54,14 +62,15 @@ export default function NewLead({addLead}) {
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="fname"
-                name="name"
+                name="first_name"
                 variant="outlined"
-                value={inputs.name}
+                value={inputs.first_name}
                 onChange={handleInputChange}
                 required
                 fullWidth
-                id="name"
+                id="first_name"
                 label="First Name"
+                helperText={errorMessages.first_name}
                 autoFocus
               />
             </Grid>
@@ -72,22 +81,23 @@ export default function NewLead({addLead}) {
                 fullWidth
                 value={inputs.last_name}
                 onChange={handleInputChange}
+                helperText={errorMessages.last_name}
                 id="last_name"
                 label="Last Name"
                 name="last_name"
-                autoComplete="lname"
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 fullWidth
+                required                
                 value={inputs.email}
                 onChange={handleInputChange}
+                helperText={errorMessages.email}
                 id="email"
                 label="Email Address"
                 name="email"
-                autoComplete="email"
               />
             </Grid>
             <Grid item xs={12}>
@@ -97,10 +107,10 @@ export default function NewLead({addLead}) {
                 fullWidth
                 value={inputs.status}
                 onChange={handleInputChange}
+                helperText={errorMessages.status}
                 name="status"
                 label="Status"
                 id="status"
-                autoComplete="status"
               />
             </Grid>
           </Grid>
