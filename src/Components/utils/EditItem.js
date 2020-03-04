@@ -11,7 +11,8 @@ import { useSelector } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    marginLeft: "-3%"
+    marginLeft: "-3%",
+    width: '70%'
   },
   form: {
     width: "100%",
@@ -61,7 +62,7 @@ export default function EditLead() {
             value={inputs[name]}
             onChange={handleInputChange}
             placeholder={lead[name]}
-            variant="outlined"
+         //   variant="outlined"
             fullWidth
             id={name}
             label={formatTitle(name)}
