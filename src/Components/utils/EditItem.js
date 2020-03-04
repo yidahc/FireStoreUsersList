@@ -39,35 +39,33 @@ export default function EditLead() {
       .update(props);
   }
 
-  const FormFields = [
-    { name: "first_name", required: false },
-    { name: "last_name", required: false },
-    { name: "email", required: false },
-    { name: "status", required: false }
+  const EditFields = [
+    { name: "first_name", label: "Name", validationType:"string"},
+    { name: "last_name", label: "Last Name", validationType:"string" },
+    { name: "email", label: "Email", validationType:"email"},
+    { name: "status", label: "Status", validationType:"string" }
   ];
 
-  const { inputs, handleInputChange, handleSubmit } = useForm(editItem);
+  const { inputs, errorMessages, handleInputChange, handleSubmit } = useForm(editItem, null, EditFields);
 
   const classes = useStyles();
 
   const renderField = () => {
-    const formatTitle = (original) => original.split("_").map(string=> `${string.charAt(0).toUpperCase()}${string.slice(1)} `)
 
     return (
       <Grid container className={classes.form} spacing={2}>
-        {FormFields.map(({name, required}) =>
-        <Grid item xs={12} sm={6}>
+        {EditFields.map(({name, label}) =>
+        <Grid item xs={12} sm={6} key={label}>
           <TextField
+            key={label}
             name={name}
             value={inputs[name]}
             onChange={handleInputChange}
             placeholder={lead[name]}
-         //   variant="outlined"
             fullWidth
             id={name}
-            label={formatTitle(name)}
-            required={required}
-            helperText={lead[name]}
+            label={label}
+            helperText={errorMessages[name]}
           />
         </Grid>
         )}

@@ -29,11 +29,13 @@ const useStyles = makeStyles(theme => ({
 
 export default function NewLead() {
   const [formOpen, setFormOpen] = React.useState(false);
-  const firestore = useFirestore();
+  const firestore = useFirestore(); 
+  // firestore nos regresa nuestra instancia de firestore que pasamos al contexto en el setup de redux
 
   function addLead(props) {
-    openForm();
-    firestore.collection("leads").add(props);
+    // las props se las pasa useForm al momento de pasarlo como callback dentro de handleSubmit
+    openForm(); // cierra el form
+    firestore.collection("leads").add(props); // pasa el objeto de nuestros 'inputs' ya validados como objeto a la colleccion
   }
 
   const classes = useStyles();
@@ -42,13 +44,16 @@ export default function NewLead() {
   };
 
   const FormFields = [
-    { name: "first_name", required: true },
-    { name: "last_name", required: true },
-    { name: "email", required: true },
-    { name: "status", required: false }
+    { name: "first_name", required: true, validationType: "string" },
+    { name: "last_name", required: true, validationType: "string" },
+    { name: "email", required: true, validationType: "email" },
+    { name: "status", required: false } 
+    // validationType determina el tipo de validacion que se realizara en useForm(en useValidation)
   ];
 
   const { inputs, errorMessages, handleInputChange, handleSubmit } = useForm(addLead, FormFields);
+
+  // los inputs y sus estados se manejan en useForm pero se mandan y renderizan desde aqui
 
   const renderField = () => {
 
@@ -60,7 +65,6 @@ export default function NewLead() {
             <TextField
               key={index}
               name={name}
-           //   variant="outlined"
               value={inputs[name]}
               onChange={handleInputChange}
               required={required}
