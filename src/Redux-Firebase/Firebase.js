@@ -2,12 +2,10 @@ import { createStore, applyMiddleware } from 'redux';
 import { rootReducer } from './Reducers/index';
 import { createFirestoreInstance } from 'redux-firestore';
 import { logger } from 'redux-logger';
-//import createSagaMiddleware from 'redux-saga'
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/firestore';
-//import rootSaga from './sagas'
 
 const firebaseConfig = { // configuraciones para conectarse a la base de datos de Firebase adecuada
     apiKey: "AIzaSyAQl41cnh2xg2NARZsNntPnaTfTfRBcE2o",
@@ -27,12 +25,10 @@ const rfConfig = {
   firebase.initializeApp(firebaseConfig); // inicializamos nuestra instancia de firebase con las configuraciones de nuestra app 
   firebase.firestore() // inicializamos firestore en cloud a traves de nuestra instancia de firebase
 
-//  const sagaMiddleware = createSagaMiddleware()
 
-  // Create store with reducers and initial state
+  // Create store with reducers and initial state 
   export const store = createStore(rootReducer, applyMiddleware(logger));
 
-  //sagaMiddleware.run(rootSaga)
 
   export const rrfProps = {
     firebase,
