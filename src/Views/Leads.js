@@ -15,7 +15,7 @@ function Leads() {
   }
   console.log(leads);*/
 
-  return <>{!leads ? "no leads" : <ListContainer list={leads} />}</>;
+  return <>{!leads ? <div className="search-loader" /> : <ListContainer list={leads} />}</>;
 }
 
 export default Leads;

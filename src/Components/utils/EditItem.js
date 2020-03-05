@@ -1,10 +1,7 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
+import { Button, CssBaseline, TextField, Typography, Container } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import useForm from "./useForm";
 import { useFirestore } from "react-redux-firebase";
 import { useSelector } from "react-redux";
@@ -12,11 +9,17 @@ import { useSelector } from "react-redux";
 const useStyles = makeStyles(theme => ({
   root: {
     marginLeft: "-3%",
-    width: '70%'
+    width: '70%',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
+  },
+  title: {
+    marginTop: theme.spacing(2),
   },
   form: {
     width: "100%",
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(3)
   },
   submit: {
@@ -77,6 +80,15 @@ export default function EditLead() {
     return (
       <Container component="main" className={classes.root} maxWidth="xs">
         <CssBaseline />
+        <Typography
+            component="h1"
+            variant="h5"
+            className={classes.title}
+ //           button="true"
+//            onClick={openForm}
+          >
+            {`${lead.first_name} ${lead.last_name}`}
+          </Typography>
           {renderField()}
           <Button
             type="submit"
