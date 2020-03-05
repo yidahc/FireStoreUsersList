@@ -2,8 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { ListItem, ListItemText } from "@material-ui/core";
 import Button from '@material-ui/core/Button';
-import { useSelector, useDispatch } from 'react-redux';
-import { setEdit } from '../Redux-Firebase/list_actions';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,11 +15,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function NestedList() {
+function NestedList({handleEdit, leadID}) {
   
-  const leadID = useSelector(state=> state.list.selectedID);
   const lead = useSelector(state => state.firestore.data.leads[leadID]);
-  const dispatch = useDispatch()
 
   const classes = useStyles();
 
@@ -38,9 +35,6 @@ function NestedList() {
     return finalArray;
   };
 
-  const handleEdit = () => {
-    dispatch(setEdit(leadID))
-  }
 
   return (
     <>

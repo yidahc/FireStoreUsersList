@@ -2,7 +2,7 @@ import React from "react";
 import { Button, CssBaseline, TextField, Typography, Container } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
-import useForm from "./useForm";
+import useForm from "./utils/useForm";
 import { useFirestore } from "react-redux-firebase";
 import { useSelector } from "react-redux";
 
@@ -28,10 +28,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function EditLead() {
-  const leadID = useSelector(state => state.list.editID);
+export default function EditLead({leadID}) {
   //  useFirebaseConnect(`leads/${leadID}`)
   //const lead = useSelector(({ firebase: { ordered: { leads } } }) => leads && leads[leadId])
+  
   const lead = useSelector(state => state.firestore.data.leads[leadID]);
   const firestore = useFirestore();
 
