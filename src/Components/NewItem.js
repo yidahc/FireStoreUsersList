@@ -6,16 +6,19 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import ExpandLess from "@material-ui/icons/ExpandLess";
 import { useFirestore } from "react-redux-firebase";
-import useForm from "./useForm";
+import useForm from "./utils/useForm";
 
 const useStyles = makeStyles(theme => ({
-  paper: {
-    marginTop: theme.spacing(8),
+  root: {
+    marginLeft: "-3%",
+    width: '70%',
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
+  },
+  title: {
+    marginTop: theme.spacing(2),
   },
   form: {
     width: "90%", // Fix IE 11 issue.
@@ -28,26 +31,21 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function NewLead() {
-  const [formOpen, setFormOpen] = React.useState(false);
   const firestore = useFirestore(); 
   // firestore nos regresa nuestra instancia de firestore que pasamos al contexto en el setup de redux
 
   function addLead(props) {
     // las props se las pasa useForm al momento de pasarlo como callback dentro de handleSubmit
-    openForm(); // cierra el form
     firestore.collection("leads").add(props); // pasa el objeto de nuestros 'inputs' ya validados como objeto a la colleccion
   }
 
   const classes = useStyles();
-  const openForm = () => {
-    setFormOpen(!formOpen);
-  };
 
   const FormFields = [
-    { name: "first_name", required: true, validationType: "string" },
-    { name: "last_name", required: true, validationType: "string" },
-    { name: "email", required: true, validationType: "email" },
-    { name: "status", required: false } 
+    { name: "first_name", required: true, validationType: "string", label:"First Name"},
+    { name: "last_name", required: true, validationType: "string", label:"Last Name"},
+    { name: "email", required: true, validationType: "email", label:"Email"},
+    { name: "status", required: false, label:"Status" } 
     // validationType determina el tipo de validacion que se realizara en useForm(en useValidation)
   ];
 
@@ -57,10 +55,9 @@ export default function NewLead() {
 
   const renderField = () => {
 
-    const formatTitle = (original) => original.split("_").map(string=> `${string.charAt(0).toUpperCase()}${string.slice(1)} `)
     return (
       <Grid container className={classes.form} spacing={2}>
-        {FormFields.map(({ name, required }, index) => (
+        {FormFields.map(({ name, required, label }, index) => (
           <Grid item xs={12} sm={6} key={index}>
             <TextField
               key={index}
@@ -70,7 +67,7 @@ export default function NewLead() {
               required={required}
               fullWidth
               id={name}
-              label={formatTitle(name)}
+              label={label}
               helperText={errorMessages[name]}
               autoFocus
             />
@@ -80,19 +77,16 @@ export default function NewLead() {
     );
   };
 
-  if (formOpen) {
     return (
-      <Container component="main" maxWidth="xs">
+      <Container component="main" className={classes.root} maxWidth="xs">
         <CssBaseline />
-        <div className={classes.paper}>
           <Typography
             component="h1"
             variant="h5"
             button="true"
-            onClick={openForm}
+            className={classes.title}
           >
             Add New Lead
-            <ExpandLess />
           </Typography>
           {renderField()}
           <Button
@@ -105,23 +99,8 @@ export default function NewLead() {
           >
             Add Lead
           </Button>
-        </div>
       </Container>
     );
-  } else {
-    return (
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        color="primary"
-        className={classes.submit}
-        onClick={openForm}
-      >
-        New Lead
-      </Button>
-    );
-  }
 }
 
 //https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-up/SignUp.js

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   List,
@@ -9,12 +9,12 @@ import {
   IconButton
 } from "@material-ui/core";
 import SelectedItem from "./SelectedItem";
-import NewItem from "./utils/NewItem";
-import EditItem from "./utils/EditItem";
-import { setSelected } from "../Redux-Firebase/list_actions";
-import { useSelector, useDispatch } from "react-redux";
+import NewItem from "./NewItem";
+import EditItem from "./EditItem";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useFirestore } from "react-redux-firebase";
+import Button from "@material-ui/core/Button";
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,27 +35,51 @@ const useStyles = makeStyles(theme => ({
 function MainList({ list }) {
   const classes = useStyles();
 
-  const listState = useSelector(state => state.list);
+  const [edit, setEdit] = useState(false);
+  const [createItem, setCreate] = useState(false);
+  const [selectedID, setSelected] = useState(null);
 
-  const { edit, selectedID } = listState;
-  const dispatch = useDispatch();
   const firestore = useFirestore();
 
   const handleSelect = id => {
-    console.log(id);
-    dispatch(setSelected(id));
+    setSelected(id);
+    setCreate(false);
+    setEdit(false)
   };
+
+  const handleEdit = () => {
+    setEdit(!edit)
+    setCreate(false)
+  }
 
   const handleDelete = id => {
     console.log(id);
-    firestore.collection("leads").doc(id).delete()
+    firestore
+      .collection("leads")
+      .doc(id)
+      .delete()
       .then(() => {
         alert("Lead successfully deleted!");
       })
-      .catch((error) => {
+      .catch(error => {
         alert("Error removing Lead");
       });
   };
+
+  const NewItemButton = () => {
+    return (
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        color="primary"
+        className={classes.submit}
+        onClick={()=>setCreate(true)}
+      >
+        New Lead
+      </Button>
+    );
+  }
 
   return (
     <div className={classes.root}>
@@ -70,7 +94,7 @@ function MainList({ list }) {
             </ListItemSecondaryAction>
           </ListItem>
         ))}
-        <NewItem />
+        <NewItemButton/>
       </List>
       <Collapse
         className={classes.collapse}
@@ -79,11 +103,18 @@ function MainList({ list }) {
         unmountOnExit
       >
         <List component="div" disablePadding>
-          {selectedID && !edit ? (
-            <SelectedItem />
-          ) : selectedID && edit ? (
-            <EditItem />
-          ) : null}
+        
+          {selectedID && !edit && !createItem
+          ?               
+              <SelectedItem leadID={selectedID} handleEdit={handleEdit} />
+           : 
+            selectedID && edit && !createItem ? 
+              <EditItem leadID={selectedID} />
+           : 
+             createItem ?
+           <NewItem setCreate={setCreate}/>
+           : null
+          }
         </List>
       </Collapse>
     </div>

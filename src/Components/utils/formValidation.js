@@ -16,18 +16,17 @@ function useValidation (inputs, inputsToValidate, inputsToConfirm) {
                     handleValidation(inputs[name], name, validationType)
                     // carga todos los errorMessages para todos los inputs que hay por validar (ya que todos empiezan vacios)
                 })
-            } 
-        return () => {
-            // esta funcion corre cada que cambian los inputs
+            }
             if (inputsToConfirm){
                 for (var key in inputs) {
                     // valida cada input que ha sido populado con el validationType que mapeamos a inputsToConfirm
                     handleValidation(inputs[key], key, inputsToConfirm[key] )
                 }
-            }
+            } 
+        return () => {
             checkValid() // siempre que los inputs camban, queremos revisar si esta listo el form para ser validado
         } 
-    },[inputs]) // inputs es la dependencia de este hook ya que queremos que se actualize junto con los input vals
+    },[inputs]) // esta funcion corre cada que cambian los inputs
 
     const handleValidation = (value, name, validationType) => {
             switch(validationType) {
